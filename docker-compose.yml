@@ -1,0 +1,21 @@
+version: "3"
+services:
+
+  asterisk:
+    build:
+      context: ./asterisk
+      dockerfile: Dockerfile
+    volumes:
+      - ./asterisk/conf/:/etc/asterisk/
+    ports:
+      - 8088:8088
+  proxy:
+    image: nginx:alpine
+    ports:
+      - 80:80
+      # - 433:433
+    volumes:
+      - ./proxy/conf.d/default.conf:/etc/nginx/conf.d/default.conf
+      - ./proxy/html:/usr/share/nginx/html
+    links:
+      - asterisk
